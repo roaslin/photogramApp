@@ -1,0 +1,38 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - 5432:5432
+  photogram:
+    build: 
+      dockerfile: Dockerfile.dev
+      context: ./photogram
+    volumes:
+      - /app/node_modules
+      - ./photogram:/app
+    ports:
+      - 3000:3000
+  photogram_api:
+    build: 
+      dockerfile: Dockerfile.dev
+      context: ./photogram_api  
+    volumes:
+      - /app/node_modules
+      - ./photogram_api:/app
+    environment:
+            - PGUSER=postgres
+            - PGHOST=postgres
+            - PGDATABASE=postgres
+            - PGPASSWORD=example
+            - PGPORT=5432
+    ports:
+      - 8000:8000
+    depends_on: 
+        - postgres
+   
