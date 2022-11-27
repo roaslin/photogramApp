@@ -1,4 +1,5 @@
 const { Pool } = require('pg');
+const { postFromFollowingUsers } = require('../repositories/postsRepository');
 
 describe('PostsRepository should', () => {
   let pool;
@@ -37,15 +38,7 @@ describe('PostsRepository should', () => {
       'nofriends@test.com',
     ]);
 
-    const result =
-      await client.query(`SELECT u2.id,u2.username, p.url, p.caption, p.lat, p.lng, p.created_at
-                            FROM users u
-                          INNER JOIN followers f ON u.id = f.leader_id
-                          INNER JOIN users u2 ON f.follower_id  = u2.id
-                          INNER JOIN posts p ON u2.id = p.user_id 
-                          WHERE u.id =1
-                          ORDER BY p.created_at DESC
-                          LIMIT 10`);
+    const result = await postFromFollowingUsers(client);
 
     expect(result).not.toBeNull();
     expect(result.rows.length).toEqual(0);
@@ -78,15 +71,7 @@ describe('PostsRepository should', () => {
       ]
     );
 
-    const result = await client.query(
-      `SELECT p.*
-        FROM users u
-      INNER JOIN followers f ON u.id = f.follower_id
-      INNER JOIN posts p ON f.leader_id  = p.user_id  
-      WHERE u.id = 1
-      ORDER BY p.created_at DESC
-      LIMIT 10`
-    );
+    const result = await postFromFollowingUsers(client);
 
     expect(result.rows.length).toEqual(1);
   });
