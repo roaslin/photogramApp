@@ -1,6 +1,6 @@
 const { Pool } = require('pg');
 
-// TODO get config from environment
+// FIXME get config from environment
 const pool = new Pool({
   host: 'postgres',
   database: 'postgres',

@@ -109,7 +109,7 @@ created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 UNIQUE(leader_id, follower_id)
 );
 
-
+// TODO Add some users to test CRUD operations
 
 
 
