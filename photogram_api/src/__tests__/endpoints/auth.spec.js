@@ -17,17 +17,17 @@ describe('Auth endpoints', function () {
 
       const response = await appRequest
         .post('/signup')
-        .send({ email: 'test@test.com' });
+        .send({ email: 'test@test.com', password: null });
 
       expect(response.status).toEqual(400);
       expect(response.body).toEqual(expectedBody);
     });
 
-    test('return 201 http status when user has signed up', async () => {
-      const response = await appRequest.post('/signup');
+    // test('return 201 http status when user has signed up', async () => {
+    //   const response = await appRequest.post('/signup');
 
-      expect(response.status).toEqual(400);
-      expect(response.body).toEqual(expectedBody);
-    });
+    //   expect(response.status).toEqual(400);
+    //   expect(response.body).toEqual(expectedBody);
+    // });
   });
 });
