@@ -15,6 +15,15 @@ describe('Auth endpoints', function () {
     test('return error message when email or password is not populated', async () => {
       const expectedBody = { message: 'Missing email or password' };
 
+      const response = await appRequest
+        .post('/signup')
+        .send({ email: 'test@test.com' });
+
+      expect(response.status).toEqual(400);
+      expect(response.body).toEqual(expectedBody);
+    });
+
+    test('return 201 http status when user has signed up', async () => {
       const response = await appRequest.post('/signup');
 
       expect(response.status).toEqual(400);
