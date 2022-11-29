@@ -1,12 +1,12 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const authRouter = express.Router();
-const { findOne } = require('../repositories/usersRepository');
+const createUser = require('../domain/user');
+const { findOne, saveUser } = require('../repositories/usersRepository');
 
 const createAuthRouter = (db) => {
   const authenticate = async (email, password, callback) => {
-    console.log('authenticate method');
     const result = await findOne(db, email, password);
-    console.log(result);
     let token;
     if (result.rows.length == 1) {
       token = 'tokenway';
@@ -16,6 +16,9 @@ const createAuthRouter = (db) => {
       callback('No user found', null);
     }
   };
+
+  authRouter.use(bodyParser.json());
+  authRouter.use(bodyParser.urlencoded({ extended: false }));
 
   authRouter.post('/login', (req, res, next) => {
     authenticate(req.body.email, req.body.password, (err, token) => {
@@ -31,11 +34,24 @@ const createAuthRouter = (db) => {
     });
   });
 
-  authRouter.post('/signup', (req, res) => {
-    if (!req.body.email || !req.body.password) {
+  authRouter.post('/signup', async (req, res) => {
+    if (!req.body.username || !req.body.email || !req.body.password) {
       res.status(400);
       res.send({ message: 'Missing email or password' });
+      return;
     }
+    const newUser = createUser(
+      req.body.username,
+      req.body.bio,
+      req.body.avatar,
+      req.body.phone,
+      req.body.email,
+      req.body.password,
+      req.body.caption
+    );
+    const result = await saveUser(db.saveUser, newUser);
+    res.status(201);
+    res.send();
   });
 
   return authRouter;

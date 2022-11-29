@@ -41,6 +41,29 @@ const createPostgresDb = (host, port) => {
         [username]
       );
     },
+    async findOneUser(username) {
+      return await query(
+        `SELECT id
+         FROM users
+        WHERE username = $1`,
+        [username]
+      );
+    },
+    async saveUser(user) {
+      return await query(
+        `
+         INSERT INTO users (username, bio, avatar, phone, email, password) VALUES ($1,$2,$3,$4,$5,$6)
+      `,
+        [
+          user.username,
+          user.bio,
+          user.avatar,
+          user.phone,
+          user.email,
+          user.password,
+        ]
+      );
+    },
   };
 };
 

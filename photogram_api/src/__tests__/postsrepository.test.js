@@ -7,12 +7,15 @@ describe('PostsRepository should', () => {
 
   beforeAll(async () => {
     db = createPostgresDb('localhost', 5433);
+  });
 
-    await db.query('DELETE FROM users WHERE true');
+  afterEach(async () => {
+    await db.query('DELETE FROM followers;');
+    await db.query('DELETE FROM users;');
+    await db.query('DELETE FROM posts;');
   });
 
   afterAll(async () => {
-    await db.query('DELETE FROM hashtags WHERE true');
     await db.pool.end();
   });
 
