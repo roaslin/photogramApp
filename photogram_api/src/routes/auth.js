@@ -10,6 +10,7 @@ const createAuthRouter = (db) => {
     let token;
     if (result.rows.length == 1) {
       if (result.rows[0].password === password) {
+        console.log(result);
         token = 'tokenway';
         callback(null, token);
       }
@@ -25,6 +26,7 @@ const createAuthRouter = (db) => {
   authRouter.post('/login', (req, res, next) => {
     authenticate(req.body.email, req.body.password, (err, token) => {
       if (err) {
+        console.log(err);
         res.status(400);
         res.send({ message: err });
         return;
