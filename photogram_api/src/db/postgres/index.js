@@ -41,12 +41,12 @@ const createPostgresDb = (host, port) => {
         [username]
       );
     },
-    async findOneUser(username) {
+    async findOneUser(email) {
       return await query(
-        `SELECT id
+        `SELECT password
          FROM users
-        WHERE username = $1`,
-        [username]
+        WHERE email = $1`,
+        [email]
       );
     },
     async saveUser(user) {

@@ -6,14 +6,16 @@ const { findOne, saveUser } = require('../repositories/usersRepository');
 
 const createAuthRouter = (db) => {
   const authenticate = async (email, password, callback) => {
-    const result = await findOne(db, email, password);
+    const result = await findOne(db.findOneUser, email);
     let token;
     if (result.rows.length == 1) {
-      token = 'tokenway';
-      console.log('authenticate create uuid');
-      callback(null, token);
+      if (result.rows[0].password === password) {
+        token = 'tokenway';
+        callback(null, token);
+      }
+      callback('Password incorrect');
     } else {
-      callback('No user found', null);
+      callback('User does not exist', null);
     }
   };
 
@@ -23,7 +25,9 @@ const createAuthRouter = (db) => {
   authRouter.post('/login', (req, res, next) => {
     authenticate(req.body.email, req.body.password, (err, token) => {
       if (err) {
-        return next(err);
+        res.status(400);
+        res.send({ message: err });
+        return;
       }
       if (token) {
         res.setHeader('Content-Type', 'application/json');
@@ -49,7 +53,7 @@ const createAuthRouter = (db) => {
       req.body.password,
       req.body.caption
     );
-    const result = await saveUser(db.saveUser, newUser);
+    await saveUser(db.saveUser, newUser);
     res.status(201);
     res.send();
   });

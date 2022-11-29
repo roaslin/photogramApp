@@ -45,7 +45,21 @@ describe('Auth endpoints', function () {
       });
 
       expect(response.status).toEqual(201);
-      // expect(response.body).toEqual(expectedBody);
+    });
+
+    describe('Login should', () => {
+      test('return user does not exist when email does not exist', async () => {
+        const expectedBody = { message: 'User does not exist' };
+
+        const response = await appRequest.post('/login').send({
+          username: 'test3',
+          email: 'test3@test.com',
+          password: '12345',
+        });
+
+        expect(response.status).toEqual(400);
+        expect(response.body).toEqual(expectedBody);
+      });
     });
   });
 });

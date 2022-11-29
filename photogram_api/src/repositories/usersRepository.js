@@ -1,5 +1,5 @@
-const findOne = async (fun, username) => {
-  return await fun(username);
+const findOne = async (fun, email) => {
+  return await fun(email);
 };
 
 const saveUser = async (fun, user) => {
