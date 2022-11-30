@@ -79,6 +79,24 @@ describe('Auth endpoints', function () {
         expect(response.status).toEqual(400);
         expect(response.body).toEqual(expectedBody);
       });
+
+      test('return token when user logs in successfully', async () => {
+        await appRequest.post('/signup').send({
+          username: 'test3',
+          email: 'test3@test.com',
+          password: '12345',
+        });
+
+        const response = await appRequest.post('/login').send({
+          username: 'test3',
+          email: 'test3@test.com',
+          password: '12345',
+        });
+
+        expect(response.status).toEqual(200);
+
+        expect(response.body.token).not.toBeNull();
+      });
     });
   });
 });

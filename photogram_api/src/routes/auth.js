@@ -1,18 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const authRouter = express.Router();
+const crypto = require('crypto');
 const createUser = require('../domain/user');
 const { findOne, saveUser } = require('../repositories/usersRepository');
+
+const authRouter = express.Router();
 
 const createAuthRouter = (db) => {
   const authenticate = async (email, password, callback) => {
     const result = await findOne(db.findOneUser, email);
-    let token;
+
     if (result.rows.length == 1) {
       if (result.rows[0].password === password) {
-        console.log(result);
-        token = 'tokenway';
+        const token = crypto.randomUUID();
         callback(null, token);
+        return;
       }
       callback('Password incorrect');
     } else {
@@ -26,7 +28,6 @@ const createAuthRouter = (db) => {
   authRouter.post('/login', (req, res, next) => {
     authenticate(req.body.email, req.body.password, (err, token) => {
       if (err) {
-        console.log(err);
         res.status(400);
         res.send({ message: err });
         return;
