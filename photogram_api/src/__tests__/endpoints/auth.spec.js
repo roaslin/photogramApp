@@ -94,7 +94,6 @@ describe('Auth endpoints', function () {
         });
 
         expect(response.status).toEqual(200);
-
         expect(response.body.token).not.toBeNull();
       });
     });
