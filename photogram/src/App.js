@@ -1,6 +1,7 @@
 import React from 'react';
 import Home from './components/home/Home';
 import Login from './components/Login';
+import Signup from './components/Signup';
 import './App.css';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { CssBaseline } from '@mui/material';
@@ -25,15 +26,7 @@ function App() {
 
   test();
 
-  return (
-    <div>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Home />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
-  );
+  return <div></div>;
 }
 
 export default App;

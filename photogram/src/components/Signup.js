@@ -4,10 +4,10 @@ import Button from '@mui/material/Button';
 import { useState } from 'react';
 import { Stack } from '@mui/system';
 import { Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
-import './Login.css';
+import './Signup.css';
 
 const Login = () => {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -22,12 +22,18 @@ const Login = () => {
             textAlign: 'center',
           }}
         >
-          PhotoGram
+          Sign up form
         </Typography>
+        <TextField
+          label='Username'
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
         <TextField
           label='Email'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          sx={{ marginTop: 2 }}
         />
         <TextField
           type='password'
@@ -37,10 +43,9 @@ const Login = () => {
           sx={{ marginTop: 2 }}
         />
         <Button variant='contained' sx={{ marginTop: 2 }}>
-          Login
+          Submit
         </Button>
       </Stack>
-      <Link to='/signup'>I don't have an account yet</Link>
     </Container>
   );
 };
