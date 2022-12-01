@@ -1,30 +1,28 @@
-import React from 'react';
-import Home from './components/home/Home';
+import { React, useEffect, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import Login from './components/Login';
-import Signup from './components/Signup';
 import './App.css';
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { CssBaseline } from '@mui/material';
-import { getPostsFromFollowingByUserId } from './api/api';
 
 function App() {
-  const token = null;
+  const [token, setToken] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setToken(token);
+  }, [token]);
 
   if (!token) {
     return (
       <div className='login_form'>
         <CssBaseline />
-        <Login />
+        <Login onChangeToken={setToken} />
       </div>
     );
   }
 
-  const test = async () => {
-    const response = await getPostsFromFollowingByUserId(1234);
-    console.log(response.data);
-  };
-
-  test();
+  navigate('/home');
 
   return <div></div>;
 }

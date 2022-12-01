@@ -5,11 +5,21 @@ import { useState } from 'react';
 import { Stack } from '@mui/system';
 import { Typography } from '@mui/material';
 import './Signup.css';
+import { signup } from '../api/api';
+import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Signup = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const submit = async () => {
+    const result = await signup(username, email, password);
+    if (result.status === 201) {
+      navigate('/');
+    }
+  };
 
   return (
     <Container>
@@ -42,7 +52,7 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           sx={{ marginTop: 2 }}
         />
-        <Button variant='contained' sx={{ marginTop: 2 }}>
+        <Button variant='contained' sx={{ marginTop: 2 }} onClick={submit}>
           Submit
         </Button>
       </Stack>
@@ -50,4 +60,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

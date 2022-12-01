@@ -4,13 +4,24 @@ import Button from '@mui/material/Button';
 import { useState } from 'react';
 import { Stack } from '@mui/system';
 import { Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
+import { login } from '../api/api';
 
-const Login = () => {
+const Login = ({ onChangeToken }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
+  const submit = async () => {
+    const result = await login(email, password);
+
+    if (result.data.token) {
+      localStorage.setItem('token', JSON.stringify(result.data.token));
+      onChangeToken(result.data.token);
+      navigate('/');
+    }
+  };
   return (
     <Container>
       <Stack sx={{ color: 'white' }}>
@@ -36,7 +47,7 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           sx={{ marginTop: 2 }}
         />
-        <Button variant='contained' sx={{ marginTop: 2 }}>
+        <Button variant='contained' sx={{ marginTop: 2 }} onClick={submit}>
           Login
         </Button>
       </Stack>

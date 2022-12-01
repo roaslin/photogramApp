@@ -9,7 +9,6 @@ const authRouter = express.Router();
 const createAuthRouter = (db) => {
   const authenticate = async (email, password, callback) => {
     const result = await findOne(db.findOneUser, email);
-
     if (result.rows.length == 1) {
       if (result.rows[0].password === password) {
         const token = crypto.randomUUID();
@@ -56,6 +55,7 @@ const createAuthRouter = (db) => {
       req.body.password,
       req.body.caption
     );
+
     await saveUser(db.saveUser, newUser);
     res.status(201);
     res.send();

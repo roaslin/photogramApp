@@ -18,6 +18,8 @@ services:
       - ./photogram:/app
     ports:
       - 3000:3000
+    depends_on:
+      - photogram_api
   photogram_api:
     build: 
       dockerfile: Dockerfile.dev
