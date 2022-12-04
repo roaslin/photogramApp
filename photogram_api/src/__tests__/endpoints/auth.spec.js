@@ -15,7 +15,7 @@ describe('Auth endpoints', function () {
 
   beforeEach(async () => {
     tokensRepository = createTokensRepository(db);
-    app = createApp(db, { tokensRepository: tokensRepository });
+    app = createApp(db, tokensRepository);
     appRequest = supertest(app);
   });
 
