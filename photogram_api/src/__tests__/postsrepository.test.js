@@ -1,12 +1,16 @@
-const { Pool } = require('pg');
 const createPostgresDb = require('../db/postgres');
-const { postFromFollowingUsers } = require('../repositories/postsRepository');
+const createPostsRepository = require('../repositories/postsRepository');
 
 describe('PostsRepository should', () => {
   let db;
+  let postsRepository;
 
   beforeAll(async () => {
     db = createPostgresDb('localhost', 5433);
+  });
+
+  beforeEach(async () => {
+    postsRepository = createPostsRepository(db);
   });
 
   afterEach(async () => {
@@ -25,8 +29,7 @@ describe('PostsRepository should', () => {
       'nofriends@test.com',
     ]);
 
-    const result = await postFromFollowingUsers(
-      db.findPostsFromFollowingUsers,
+    const result = await postsRepository.findPostsFromFollowingUsers(
       'nofriends'
     );
 
@@ -63,8 +66,7 @@ describe('PostsRepository should', () => {
       ]
     );
 
-    const result = await postFromFollowingUsers(
-      db.findPostsFromFollowingUsers,
+    const result = await postsRepository.findPostsFromFollowingUsers(
       'ihaveOnefriend'
     );
 

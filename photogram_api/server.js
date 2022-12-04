@@ -3,8 +3,11 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const createPostgresDb = require('./src/db/postgres');
 const createAuthRouter = require('./src/routes/auth');
+const { createTestScheduler } = require('jest');
+const createUserRepository = require('./src/repositories/usersRepository');
 const db = createPostgresDb('postgres', 5432);
-const authRouter = createAuthRouter(db);
+const usersRepository = createUserRepository(db);
+const authRouter = createAuthRouter(usersRepository);
 const app = express();
 
 app.use(cors());

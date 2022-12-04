@@ -2,13 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const createUser = require('../domain/user');
-const { findOne, saveUser } = require('../repositories/usersRepository');
-
 const authRouter = express.Router();
 
-const createAuthRouter = (db) => {
+const createAuthRouter = (userRepository) => {
   const authenticate = async (email, password, callback) => {
-    const result = await findOne(db.findOneUser, email);
+    const result = await userRepository.findOneUser(email);
     if (result.rows.length == 1) {
       if (result.rows[0].password === password) {
         const token = crypto.randomUUID();
@@ -56,7 +54,7 @@ const createAuthRouter = (db) => {
       req.body.caption
     );
 
-    await saveUser(db.saveUser, newUser);
+    await userRepository.saveUser(newUser);
     res.status(201);
     res.send();
   });
