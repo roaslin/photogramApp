@@ -1,18 +1,21 @@
 const supertest = require('supertest');
 const createPostgresDb = require('../../db/postgres');
 const createApp = require('../../setup/compositionroot');
+const createTokensRepository = require('../../repositories/tokensRepository');
 
 describe('Auth endpoints', function () {
   let db;
   let app;
   let appRequest;
+  let tokensRepository;
 
   beforeAll(async () => {
     db = createPostgresDb('localhost', 5433);
   });
 
   beforeEach(async () => {
-    app = createApp(db);
+    tokensRepository = createTokensRepository(db);
+    app = createApp(db, { tokensRepository: tokensRepository });
     appRequest = supertest(app);
   });
 
@@ -80,7 +83,7 @@ describe('Auth endpoints', function () {
         expect(response.body).toEqual(expectedBody);
       });
 
-      test('return token when user logs in successfully', async () => {
+      test('return token when user signs up successfully', async () => {
         await appRequest.post('/signup').send({
           username: 'test3',
           email: 'test3@test.com',

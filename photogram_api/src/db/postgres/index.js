@@ -17,7 +17,7 @@ const createPostgresDb = (host, port) => {
         const res = await pool.query(text, params);
         return res;
       } catch (error) {
-        console.log('Catch error');
+        console.log(error);
         return 'error';
       }
     },

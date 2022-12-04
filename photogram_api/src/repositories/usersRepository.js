@@ -11,7 +11,7 @@ const createUsersRepository = (db) => {
   return {
     async findOneUser(email) {
       return await query(
-        `SELECT password
+        `SELECT id, password
          FROM users
         WHERE email = $1`,
         [email]

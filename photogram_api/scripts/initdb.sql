@@ -109,12 +109,12 @@ created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 UNIQUE(leader_id, follower_id)
 );
 
-CREATE TABLE tokens {
+CREATE TABLE tokens (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   token VARCHAR(40),
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-}
-// TODO Add some users to test CRUD operations
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+-- // TODO Add some users to test CRUD operations
 
 

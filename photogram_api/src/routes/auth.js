@@ -4,19 +4,36 @@ const crypto = require('crypto');
 const createUser = require('../domain/user');
 const authRouter = express.Router();
 
-const createAuthRouter = (userRepository) => {
+const createAuthRouter = (userRepository, tokensRepository) => {
   authRouter.use(bodyParser.json());
   authRouter.use(bodyParser.urlencoded({ extended: false }));
 
   authRouter.post('/login', async (req, res, next) => {
     const result = await userRepository.findOneUser(req.body.email);
 
-    if (result.rows.length == 1) {
+    if (result.rows.length === 1) {
       if (result.rows[0].password === req.body.password) {
         const token = crypto.randomUUID();
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify({ token: token }));
-        return;
+        try {
+          const userId = result.rows[0].id;
+          const tokenResult = await tokensRepository.save({
+            userId: userId,
+            token: token,
+          });
+
+          if (!tokenResult && tokenResult.rows.length !== 1) {
+            res.status(400);
+            res.send({ message: "Couldn't login, try again" });
+            return;
+          }
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ token: token }));
+          return;
+        } catch (err) {
+          console.log(err);
+          res.status(400);
+          res.send({ message: "Couldn't login, try again" });
+        }
       }
       res.status(400);
       res.send({ message: 'Password incorrect' });
