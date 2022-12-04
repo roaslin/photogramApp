@@ -5,37 +5,25 @@ const createUser = require('../domain/user');
 const authRouter = express.Router();
 
 const createAuthRouter = (userRepository) => {
-  const authenticate = async (email, password, callback) => {
-    const result = await userRepository.findOneUser(email);
-    if (result.rows.length == 1) {
-      if (result.rows[0].password === password) {
-        const token = crypto.randomUUID();
-        callback(null, token);
-        return;
-      }
-      callback('Password incorrect');
-    } else {
-      callback('User does not exist', null);
-    }
-  };
-
   authRouter.use(bodyParser.json());
   authRouter.use(bodyParser.urlencoded({ extended: false }));
 
-  authRouter.post('/login', (req, res, next) => {
-    authenticate(req.body.email, req.body.password, (err, token) => {
-      if (err) {
-        res.status(400);
-        res.send({ message: err });
-        return;
-      }
-      if (token) {
+  authRouter.post('/login', async (req, res, next) => {
+    const result = await userRepository.findOneUser(req.body.email);
+
+    if (result.rows.length == 1) {
+      if (result.rows[0].password === req.body.password) {
+        const token = crypto.randomUUID();
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify({ token: token }));
-      } else {
-        res.send('Authentication failed check email/password');
+        return;
       }
-    });
+      res.status(400);
+      res.send({ message: 'Password incorrect' });
+    } else {
+      res.status(400);
+      res.send({ message: 'User does not exist' });
+    }
   });
 
   authRouter.post('/signup', async (req, res) => {

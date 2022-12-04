@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const { findOne } = require('../repositories/usersRepository');
 
 const authenticate = async (email, password, callback) => {
-  const result = await findOne(db.findOneUser, email);
+  const result = await userRepository.findOneUser(email);
   if (result.rows.length == 1) {
     if (result.rows[0].password === password) {
       const token = crypto.randomUUID();
