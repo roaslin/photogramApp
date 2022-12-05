@@ -32,9 +32,23 @@ describe('All user requests should', () => {
   });
 
   test('return latest posts from users the current user is following when has auth token', async () => {
-    const response = await appRequest.get('/home');
+    await appRequest.post('/signup').send({
+      username: 'test3',
+      email: 'test3@test.com',
+      password: '12345',
+    });
+
+    const loginReponse = await appRequest.post('/login').send({
+      username: 'test3',
+      email: 'test3@test.com',
+      password: '12345',
+    });
+
+    const response = await appRequest
+      .get('/home')
+      .set('Authorization', `Bearer ${loginReponse.body.token}`);
 
     expect(response.status).toEqual(200);
-    expect(response.body.posts.length).toEqual(0);
+    expect(response.body.posts).toEqual([]);
   });
 });

@@ -14,6 +14,11 @@ const createTokensRepository = (db) => {
         token.value,
       ]);
     },
+    async findUserIdByToken(token) {
+      return await query(`SELECT user_id FROM tokens WHERE token = $1`, [
+        token,
+      ]);
+    },
   };
 };
 

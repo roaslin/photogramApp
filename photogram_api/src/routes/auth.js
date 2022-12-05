@@ -9,7 +9,7 @@ const createAuthRouter = (userRepository, tokensRepository) => {
   authRouter.use(bodyParser.urlencoded({ extended: false }));
 
   authRouter.post('/login', async (req, res) => {
-    const result = await userRepository.findOneUser(req.body.email);
+    const result = await userRepository.findOneByEmail(req.body.email);
 
     if (result.rows.length === 1) {
       if (result.rows[0].password === req.body.password) {
@@ -18,7 +18,7 @@ const createAuthRouter = (userRepository, tokensRepository) => {
           const userId = result.rows[0].id;
           const tokenResult = await tokensRepository.save({
             userId: userId,
-            token: token,
+            value: token,
           });
 
           if (!tokenResult && tokenResult.rows.length !== 1) {

@@ -1,18 +1,31 @@
 const crypto = require('crypto');
-const { findOne } = require('../repositories/usersRepository');
+const createTokensRepository = require('../repositories/tokensRepository');
+const createUsersRepository = require('../repositories/usersRepository');
 
-const authenticate = async (email, password, callback) => {
-  const result = await userRepository.findOneUser(email);
-  if (result.rows.length == 1) {
-    if (result.rows[0].password === password) {
-      const token = crypto.randomUUID();
-      callback(null, token);
-      return;
+const createAuthenticator = (db) => {
+  const tokensRepository = createTokensRepository(db);
+  const usersRepository = createUsersRepository(db);
+
+  return async (req, res, next) => {
+    const bearer = req.headers['authorization'];
+    if (!bearer) {
+      const err = new Error('Not authorized');
+      err.status = 401;
+      return next(err);
     }
-    callback('Password incorrect');
-  } else {
-    callback('User does not exist', null);
-  }
+    const token = bearer ? bearer.split(' ')[1] : null;
+    const result = await tokensRepository.findUserIdByToken(token);
+
+    if (result.rowCount === 0) {
+      const err = new Error('Not authorized');
+      err.status = 401;
+      return next(err);
+    }
+    const userId = result.rows[0].user_id;
+    const username = await usersRepository.findOne(userId);
+    req.username = username;
+    return next();
+  };
 };
 
-module.exports = { authenticate };
+module.exports = createAuthenticator;

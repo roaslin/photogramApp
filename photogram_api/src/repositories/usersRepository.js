@@ -9,12 +9,20 @@ const createUsersRepository = (db) => {
   };
 
   return {
-    async findOneUser(email) {
+    async findOneByEmail(email) {
       return await query(
         `SELECT id, password
          FROM users
         WHERE email = $1`,
         [email]
+      );
+    },
+    async findOne(userId) {
+      return await query(
+        `SELECT username
+         FROM users
+        WHERE id = $1`,
+        [userId]
       );
     },
     async saveUser(user) {
