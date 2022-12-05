@@ -30,4 +30,11 @@ describe('All user requests should', () => {
 
     expect(response.status).toEqual(401);
   });
+
+  test('return latest posts from users the current user is following when has auth token', async () => {
+    const response = await appRequest.get('/home');
+
+    expect(response.status).toEqual(200);
+    expect(response.body.posts.length).toEqual(0);
+  });
 });
