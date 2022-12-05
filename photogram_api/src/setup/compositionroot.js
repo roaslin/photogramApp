@@ -9,7 +9,7 @@ const createAuthenticator = require('../middleware/authentication');
 const createPostsRepository = require('../repositories/postsRepository');
 
 const createApp = (database, tokensRepo) => {
-  const db = database ?? zcreatePostgresDb('postgres', 5432);
+  const db = database ?? createPostgresDb('postgres', 5432);
   const usersRepository = createUserRepository(db);
   const tokensRepository = tokensRepo ?? createTokensRepository(db);
   const postsRepository = createPostsRepository(db);
