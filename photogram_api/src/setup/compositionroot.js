@@ -20,6 +20,7 @@ const createApp = (database, tokensRepo) => {
 
   // Routes
   app.use(createAuthRouter(usersRepository, tokensRepository));
+  // Authenticated requests
   app.use(createAuthenticator(db));
   app.use(createHomeRouter(postsRepository));
 
