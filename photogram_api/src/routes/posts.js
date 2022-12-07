@@ -14,12 +14,15 @@ const createPostsRouter = (postsRepository) => {
       userId: userId,
     };
     const newPostCommand = PostCommand.fromDto(dto);
-    // TODO store
-
+    if (newPostCommand === 'not-valid') {
+      res.status(400);
+      res.send('Data is not valid');
+      return;
+    }
     const result = await postsRepository.save(newPostCommand);
     if (result === 'error') {
       res.status(200);
-      res.send({ message: 'Something went wrong' });
+      res.send('Something went wrong, try again');
       return;
     }
     res.status(201);

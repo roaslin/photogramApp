@@ -38,6 +38,19 @@ describe('Posts endpoint should', () => {
     await db.pool.end();
   });
 
+  test('return status 400 when data is not valid', async () => {
+    const response = await appRequest
+      .post('/posts')
+      .send({
+        caption: 'This is a caption',
+        lat: 45.2,
+        lng: 65.5,
+      })
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).toEqual(400);
+  });
+
   test('store a post', async () => {
     const response = await appRequest
       .post('/posts')

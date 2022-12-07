@@ -8,6 +8,9 @@ class PostCommand {
   }
 
   static fromDto(dto) {
+    if (!dto.url || !dto.caption || !dto.lat || !dto.lng || !dto.userId) {
+      return 'not-valid';
+    }
     return new PostCommand(dto.url, dto.caption, dto.lat, dto.lng, dto.userId);
   }
 }
