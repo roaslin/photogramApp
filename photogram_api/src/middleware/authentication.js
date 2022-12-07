@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const createTokensRepository = require('../repositories/tokensRepository');
 const createUsersRepository = require('../repositories/usersRepository');
 
+// TODO test this function
 const createAuthenticator = (db) => {
   const tokensRepository = createTokensRepository(db);
   const usersRepository = createUsersRepository(db);
@@ -14,11 +15,8 @@ const createAuthenticator = (db) => {
       return next(err);
     }
     const token = bearer ? bearer.split(' ')[1].replaceAll('"', '') : null;
-
-    console.log(`TOKEN IS ${token}`);
     const result = await tokensRepository.findUserIdByToken(token);
 
-    console.log(result);
     if (result.rowCount === 0) {
       const err = new Error('Not authorized');
       err.status = 401;
@@ -26,6 +24,7 @@ const createAuthenticator = (db) => {
     }
     const userId = result.rows[0].user_id;
     const username = await usersRepository.findOne(userId);
+    req.userId = userId;
     req.username = username;
     return next();
   };

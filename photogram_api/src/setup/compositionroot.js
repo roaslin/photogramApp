@@ -7,6 +7,7 @@ const createTokensRepository = require('../repositories/tokensRepository');
 const createHomeRouter = require('../routes/home');
 const createAuthenticator = require('../middleware/authentication');
 const createPostsRepository = require('../repositories/postsRepository');
+const createPostsRouter = require('../routes/posts');
 
 const createApp = (database, tokensRepo) => {
   const db = database ?? createPostgresDb('postgres', 5432);
@@ -23,6 +24,7 @@ const createApp = (database, tokensRepo) => {
   // Authenticated requests
   app.use(createAuthenticator(db));
   app.use(createHomeRouter(postsRepository));
+  app.use(createPostsRouter(postsRepository));
 
   return app;
 };

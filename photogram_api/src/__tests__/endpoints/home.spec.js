@@ -18,7 +18,6 @@ describe('All user requests should', () => {
 
   afterEach(async () => {
     await db.query('DELETE FROM users;');
-    await db.query('DELETE FROM posts;');
   });
 
   afterAll(async () => {

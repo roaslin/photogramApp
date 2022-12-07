@@ -5,10 +5,24 @@ const createPostsRepository = (db) => {
       return res;
     } catch (error) {
       console.log(error);
+      // return error to check in controller
+      return 'error';
     }
   };
 
   return {
+    async save(postCommand) {
+      return await query(
+        `INSERT INTO posts (url, caption, lat,lng, user_id) VALUES ($1,$2,$3,$4,$5)`,
+        [
+          postCommand.url,
+          postCommand.caption,
+          postCommand.lat,
+          postCommand.lng,
+          postCommand.userId,
+        ]
+      );
+    },
     async findPostsFromFollowingUsers(username) {
       return await query(
         `SELECT p.*
