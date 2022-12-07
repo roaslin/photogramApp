@@ -22,7 +22,7 @@ const Signup = () => {
   };
 
   return (
-    <Container>
+    <Container className='signup_form'>
       <Stack sx={{ color: 'white' }}>
         <Typography
           sx={{

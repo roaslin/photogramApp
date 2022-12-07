@@ -13,9 +13,12 @@ const createAuthenticator = (db) => {
       err.status = 401;
       return next(err);
     }
-    const token = bearer ? bearer.split(' ')[1] : null;
+    const token = bearer ? bearer.split(' ')[1].replaceAll('"', '') : null;
+
+    console.log(`TOKEN IS ${token}`);
     const result = await tokensRepository.findUserIdByToken(token);
 
+    console.log(result);
     if (result.rowCount === 0) {
       const err = new Error('Not authorized');
       err.status = 401;

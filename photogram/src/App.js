@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Login from './components/Login';
 import './App.css';
 import { CssBaseline } from '@mui/material';
