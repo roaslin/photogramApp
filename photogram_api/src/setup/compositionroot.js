@@ -9,11 +9,11 @@ const createAuthenticator = require('../middleware/authentication');
 const createPostsRepository = require('../repositories/postsRepository');
 const createPostsRouter = require('../routes/posts');
 
-const createApp = (database, tokensRepo) => {
+const createApp = (database, tokensRepo, postsRepo) => {
   const db = database ?? createPostgresDb('postgres', 5432);
   const usersRepository = createUserRepository(db);
   const tokensRepository = tokensRepo ?? createTokensRepository(db);
-  const postsRepository = createPostsRepository(db);
+  const postsRepository = postsRepo ?? createPostsRepository(db);
   const app = express();
   app.use(cors());
   app.use(bodyParser.json());

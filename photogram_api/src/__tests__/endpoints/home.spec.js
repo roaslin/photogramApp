@@ -24,12 +24,6 @@ describe('All user requests should', () => {
     await db.pool.end();
   });
 
-  test('return not authorized when user has not auth token', async () => {
-    const response = await appRequest.get('/home');
-
-    expect(response.status).toEqual(401);
-  });
-
   test('return latest posts from users the current user is following when has auth token', async () => {
     await appRequest.post('/signup').send({
       username: 'test3',

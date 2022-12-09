@@ -99,6 +99,12 @@ describe('Auth endpoints', function () {
         expect(response.status).toEqual(200);
         expect(response.body.token).not.toBeNull();
       });
+
+      test('return not authorized when user has not auth token', async () => {
+        const response = await appRequest.get('/home');
+    
+        expect(response.status).toEqual(401);
+      });
     });
   });
 });

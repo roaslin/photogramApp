@@ -2,15 +2,20 @@ const supertest = require('supertest');
 const createPostgresDb = require('../../db/postgres');
 const createApp = require('../../setup/compositionroot');
 
+let db;
+
+beforeAll(async () => {
+  db = createPostgresDb('localhost', 5433);
+});
+
+afterAll(async () => {
+  await db.pool.end();
+});
+
 describe('Posts endpoint should', () => {
-  let db;
   let app;
   let appRequest;
   let token;
-
-  beforeAll(async () => {
-    db = createPostgresDb('localhost', 5433);
-  });
 
   beforeEach(async () => {
     app = createApp(db);
@@ -32,10 +37,6 @@ describe('Posts endpoint should', () => {
 
   afterEach(async () => {
     await db.query('DELETE FROM users;');
-  });
-
-  afterAll(async () => {
-    await db.pool.end();
   });
 
   test('return status 400 when data is not valid', async () => {

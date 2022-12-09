@@ -22,7 +22,7 @@ const createPostsRouter = (postsRepository) => {
     const result = await postsRepository.save(newPostCommand);
     if (result === 'error') {
       res.status(200);
-      res.send('Something went wrong, try again');
+      res.send({ message: 'Something went wrong, try again' });
       return;
     }
     res.status(201);
