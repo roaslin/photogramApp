@@ -6,6 +6,7 @@ const createPostsRouter = (postsRepository) => {
   postsRouter.post('/posts', async (req, res) => {
     const userId = req.userId;
     const body = req.body;
+
     const dto = {
       url: body.url,
       caption: body.caption,

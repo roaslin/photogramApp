@@ -23,7 +23,11 @@ const createAuthenticator = (db) => {
       return next(err);
     }
     const userId = result.rows[0].user_id;
+    console.log('iserId');
+    console.log(username);
     const username = await usersRepository.findOne(userId);
+    console.log('username');
+    console.log(username);
     req.userId = userId;
     req.username = username;
     return next();
